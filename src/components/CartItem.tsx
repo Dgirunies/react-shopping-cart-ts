@@ -2,7 +2,7 @@ import { Button } from "@material-ui/core";
 
 import { CartItemType } from "../App";
 
-import { Wrapper } from "./CartItem.styles";
+import { Wrapper, InformationWrapper, ButtonsWrapper } from "./CartItem.styles";
 import Item from "./ProductItem";
 
 type Props = {
@@ -15,29 +15,30 @@ const CartItem: React.FC<Props> = ({ item, addToCart, removeFromCart }) => (
   <Wrapper>
     <div>
       <h3>{item.title}</h3>
-      <div>
+      <InformationWrapper>
         <p>Price: ${item.price}</p>
         <p>Total: ${(item.amount * item.price).toFixed(2)}</p>
-      </div>
-    </div>
-    <div>
-      <Button
-        size="small"
-        disableElevation
-        variant="contained"
-        onClick={() => removeFromCart(item.id)}
-      >
-        -
-      </Button>
-      <p>{item.amount}</p>
-      <Button
-        size="small"
-        disableElevation
-        variant="contained"
-        onClick={() => addToCart(item)}
-      >
-        +
-      </Button>
+      </InformationWrapper>
+
+      <ButtonsWrapper>
+        <Button
+          size="small"
+          disableElevation
+          variant="contained"
+          onClick={() => removeFromCart(item.id)}
+        >
+          -
+        </Button>
+        <p>{item.amount}</p>
+        <Button
+          size="small"
+          disableElevation
+          variant="contained"
+          onClick={() => addToCart(item)}
+        >
+          +
+        </Button>
+      </ButtonsWrapper>
     </div>
     <img src={item.image} alt={item.title} />
   </Wrapper>
