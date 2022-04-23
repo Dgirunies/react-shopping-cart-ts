@@ -4,9 +4,10 @@ import { useQuery } from "react-query";
 //Components
 import { Drawer, LinearProgress, Grid, Badge } from "@material-ui/core";
 import { AddShoppingCart } from "@material-ui/icons";
+import ProductItem from "./components/ProductItem";
 
 //Styles
-import { Wrapper } from "./App.styles";
+import { Wrapper, StyledButton } from "./App.styles";
 
 //Types
 export type CartItemType = {
@@ -24,12 +25,43 @@ const getProducts = async (): Promise<CartItemType[]> => {
 };
 
 const App = () => {
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([] as CartItemType[]);
   const { data, isLoading, error } = useQuery<CartItemType[]>(
     "products",
     getProducts
   );
-  console.log(data);
-  return <div className="App">Start</div>;
+
+  const getTotalItems = (items: CartItemType[]) => {
+    return items.reduce((ack: number, items) => ack + items.amount, 0);
+  };
+
+  const handleAddToCart = (clickedItem: CartItemType) => null;
+
+  const handleRemoveFromCart = () => null;
+
+  if (isLoading) return <LinearProgress />;
+  if (error) return <div>Something Went Wrong</div>;
+
+  return (
+    <Wrapper>
+      <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
+        Cart Goes Here
+      </Drawer>
+      <StyledButton onClick={() => setCartOpen(true)}>
+        <Badge badgeContent={getTotalItems(cartItems)} color="error">
+          <AddShoppingCart />
+        </Badge>
+      </StyledButton>
+      <Grid container spacing={4}>
+        {data?.map((item) => (
+          <Grid item key={item.id} xs={12} sm={4}>
+            <ProductItem item={item} handleAddToCart={handleAddToCart} />
+          </Grid>
+        ))}
+      </Grid>
+    </Wrapper>
+  );
 };
 
 export default App;
